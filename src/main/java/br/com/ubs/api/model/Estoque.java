@@ -42,6 +42,19 @@ public class Estoque implements Serializable{
 		this.file_import = file_import;
 	}
 	
+	public Estoque(String product, Integer quantity, BigDecimal price, String type, String industry,
+			String origin, String file_import) {
+		super();
+		this.id = null;
+		this.product = product;
+		this.quantity = quantity;
+		this.price = price;
+		this.type = type;
+		this.industry = industry;
+		this.origin = origin;
+		this.file_import = file_import;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
