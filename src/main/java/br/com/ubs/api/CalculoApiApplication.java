@@ -1,4 +1,4 @@
-package br.com.ubs.api.calculoapi;
+package br.com.ubs.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
