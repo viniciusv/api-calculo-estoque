@@ -1,6 +1,7 @@
 package br.com.ubs.api.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,11 +19,29 @@ public class Estoque implements Serializable{
 	
 	private String product;
 	private Integer quantity;
-	private Double price;
+	private BigDecimal price;
 	private String type;
 	private String industry;
 	private String origin;
 	private String file_import;
+	
+	public Estoque() {
+		
+	}
+
+	public Estoque(Integer id, String product, Integer quantity, BigDecimal price, String type, String industry,
+			String origin, String file_import) {
+		super();
+		this.id = id;
+		this.product = product;
+		this.quantity = quantity;
+		this.price = price;
+		this.type = type;
+		this.industry = industry;
+		this.origin = origin;
+		this.file_import = file_import;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -41,10 +60,10 @@ public class Estoque implements Serializable{
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
-	public Double getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
-	public void setPrice(Double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 	public String getType() {
