@@ -9,5 +9,5 @@ import br.com.ubs.api.dto.LojistaDto;
 @Component
 public interface CalculoApiService {
 	
-	List<LojistaDto> returnProdutosPorQuantidadeDeLojistas(String nomeProduto, int quantidadeDeLojistas);
+	List<LojistaDto> returnLojistasComProdutos(String nomeProduto, int quantidadeDeLojistas);
 }

@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Estoque implements Serializable{
+public class Produto implements Serializable{
 	
 	private static final long serialVersionUID = -7792490747594316061L;
 
@@ -18,36 +18,37 @@ public class Estoque implements Serializable{
 	private Integer id;
 	
 	private String product;
-	private Integer quantity;
+	private BigDecimal quantity;
 	private BigDecimal price;
+	private BigDecimal volume;
 	private String type;
 	private String industry;
 	private String origin;
 	private String file_import;
 	
-	public Estoque() {
-		
-	}
+	public Produto() {}
 
-	public Estoque(Integer id, String product, Integer quantity, BigDecimal price, String type, String industry,
+	public Produto(Integer id, String product, BigDecimal quantity, BigDecimal price, String type, String industry,
 			String origin, String file_import) {
 		super();
 		this.id = id;
 		this.product = product;
 		this.quantity = quantity;
 		this.price = price;
+		this.volume = this.price.multiply(this.quantity);
 		this.type = type;
 		this.industry = industry;
 		this.origin = origin;
 		this.file_import = file_import;
 	}
 	
-	public Estoque(String product, Integer quantity, BigDecimal price, String type, String industry,
+	public Produto(String product, BigDecimal quantity, BigDecimal price, String type, String industry,
 			String origin, String file_import) {
 		super();
 		this.id = null;
 		this.product = product;
 		this.quantity = quantity;
+		this.volume = this.price.multiply(this.quantity);
 		this.price = price;
 		this.type = type;
 		this.industry = industry;
@@ -67,10 +68,10 @@ public class Estoque implements Serializable{
 	public void setProduct(String product) {
 		this.product = product;
 	}
-	public Integer getQuantity() {
+	public BigDecimal getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(BigDecimal quantity) {
 		this.quantity = quantity;
 	}
 	public BigDecimal getPrice() {
@@ -103,6 +104,7 @@ public class Estoque implements Serializable{
 	public void setFile_import(String file_import) {
 		this.file_import = file_import;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -115,8 +117,10 @@ public class Estoque implements Serializable{
 		result = prime * result + ((product == null) ? 0 : product.hashCode());
 		result = prime * result + ((quantity == null) ? 0 : quantity.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + ((volume == null) ? 0 : volume.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -125,7 +129,7 @@ public class Estoque implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Estoque other = (Estoque) obj;
+		Produto other = (Produto) obj;
 		if (file_import == null) {
 			if (other.file_import != null)
 				return false;
@@ -165,6 +169,11 @@ public class Estoque implements Serializable{
 			if (other.type != null)
 				return false;
 		} else if (!type.equals(other.type))
+			return false;
+		if (volume == null) {
+			if (other.volume != null)
+				return false;
+		} else if (!volume.equals(other.volume))
 			return false;
 		return true;
 	}
