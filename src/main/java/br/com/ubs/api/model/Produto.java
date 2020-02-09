@@ -28,6 +28,20 @@ public class Produto implements Serializable{
 	
 	public Produto() {}
 
+	public Produto(Integer id, String product, BigDecimal quantity, BigDecimal price, BigDecimal volume, String type, String industry,
+			String origin, String file_import) {
+		super();
+		this.id = id;
+		this.product = product;
+		this.quantity = quantity;
+		this.price = price;
+		this.volume = volume;
+		this.type = type;
+		this.industry = industry;
+		this.origin = origin;
+		this.file_import = file_import;
+	}
+	
 	public Produto(Integer id, String product, BigDecimal quantity, BigDecimal price, String type, String industry,
 			String origin, String file_import) {
 		super();

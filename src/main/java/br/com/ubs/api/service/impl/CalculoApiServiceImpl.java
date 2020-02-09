@@ -16,6 +16,8 @@ import br.com.ubs.api.dto.ProdutoDto;
 import br.com.ubs.api.model.Produto;
 import br.com.ubs.api.service.CalculoApiService;
 import br.com.ubs.api.service.ProdutoService;
+import br.com.ubs.api.service.exceptions.ProdutoNotFoundException;
+import br.com.ubs.api.service.exceptions.ValidationNotFoundException;
 
 @Service
 public class CalculoApiServiceImpl implements CalculoApiService{
@@ -39,7 +41,7 @@ public class CalculoApiServiceImpl implements CalculoApiService{
 		this.carregaProdutos(nomeProduto);	
 		this.inicializaVariaveis();
 		this.inicializaLojistasDto(quantidadeDeLojistas);
-		this.inicializaCalculo(BigDecimal.valueOf(quantidadeDeLojistas));	
+		this.distribuiProdutosPorLojistas(BigDecimal.valueOf(quantidadeDeLojistas));	
 		
 		return this.lojistas;
 		
@@ -48,10 +50,10 @@ public class CalculoApiServiceImpl implements CalculoApiService{
 	private void validaInformacoes(String nomeProduto, int quantidadeDeLojistas) {
 		
 		if(nomeProduto.equals(""))
-			throw new RuntimeException("Produto vazio");
+			throw new ValidationNotFoundException("Produto vazio!");
 		
 		if(quantidadeDeLojistas == 0)
-			throw new RuntimeException("Quantidade de lojista tem que ser maior que 0!");
+			throw new ValidationNotFoundException("Quantidade de lojista tem que ser maior que 0!");
 		
 	}
 
@@ -65,7 +67,7 @@ public class CalculoApiServiceImpl implements CalculoApiService{
 		
 	}
 
-	private void inicializaCalculo(BigDecimal quantidadeDeLojistas) {
+	private void distribuiProdutosPorLojistas(BigDecimal quantidadeDeLojistas) {
 		
 		boolean isPulo = false;
 		
@@ -119,7 +121,7 @@ public class CalculoApiServiceImpl implements CalculoApiService{
 		this.produtos = this.produtoService.findByProduto(nomeProduto);
 		
 		if(produtos == null ||produtos.size() == 0) 
-			throw new RuntimeException("Produto não encontrado!");
+			throw new ProdutoNotFoundException("Produto não encontrado!");
 		
 	}
 
