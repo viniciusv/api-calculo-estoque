@@ -8,15 +8,22 @@ public class ProdutoDto implements Serializable{
 	private static final long serialVersionUID = 8390634332867069126L;
 
 	private String produto;
-	private Integer quantidade;
+	private BigDecimal quantidade;
 	private BigDecimal preco;
 	private BigDecimal volume;
 	
-	public ProdutoDto(String produto, Integer quantidade, BigDecimal preco, BigDecimal volume) {
+	public ProdutoDto(String produto) {
+		this.produto = produto;
+		this.quantidade = null;
+		this.preco = null;
+		this.volume = null;
+	}
+	
+	public ProdutoDto(String produto, BigDecimal quantidade, BigDecimal preco) {
 		this.produto = produto;
 		this.quantidade = quantidade;
 		this.preco = preco;
-		this.volume = volume;
+		this.volume = this.quantidade.multiply(preco);
 	}
 
 	public String getProduto() {
@@ -27,11 +34,11 @@ public class ProdutoDto implements Serializable{
 		this.produto = produto;
 	}
 
-	public Integer getQuantidade() {
+	public BigDecimal getQuantidade() {
 		return quantidade;
 	}
 
-	public void setQuantidade(Integer quantidade) {
+	public void setQuantidade(BigDecimal quantidade) {
 		this.quantidade = quantidade;
 	}
 

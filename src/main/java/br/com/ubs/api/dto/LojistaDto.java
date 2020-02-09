@@ -2,21 +2,34 @@ package br.com.ubs.api.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LojistaDto implements Serializable{
 
 	private static final long serialVersionUID = -1025486225937803496L;
 
 	private String lojista;
-	private Integer quantidadeTotal;
+	private BigDecimal quantidadeTotal;
 	private BigDecimal financeiro;
 	private BigDecimal precoMedio;
+	private List<ProdutoDto> produtos;
 	
-	public LojistaDto(String lojista, Integer quantidadeTotal, BigDecimal financeiro, BigDecimal precoMedio) {
+	public LojistaDto(String lojista) {
+		this.lojista = lojista;
+		this.quantidadeTotal = new BigDecimal(0);
+		this.financeiro = new BigDecimal(0);
+		this.precoMedio = new BigDecimal(0);
+		this.produtos = new ArrayList<ProdutoDto>();
+	}
+	
+	public LojistaDto(String lojista, BigDecimal quantidadeTotal, BigDecimal financeiro, BigDecimal precoMedio, List<ProdutoDto> produtos) {
 		this.lojista = lojista;
 		this.quantidadeTotal = quantidadeTotal;
 		this.financeiro = financeiro;
 		this.precoMedio = precoMedio;
+		this.produtos = produtos;
 	}
 
 	public String getLojista() {
@@ -27,11 +40,11 @@ public class LojistaDto implements Serializable{
 		this.lojista = lojista;
 	}
 
-	public Integer getQuantidadeTotal() {
+	public BigDecimal getQuantidadeTotal() {
 		return quantidadeTotal;
 	}
 
-	public void setQuantidadeTotal(Integer quantidadeTotal) {
+	public void setQuantidadeTotal(BigDecimal quantidadeTotal) {
 		this.quantidadeTotal = quantidadeTotal;
 	}
 
@@ -49,6 +62,18 @@ public class LojistaDto implements Serializable{
 
 	public void setPrecoMedio(BigDecimal precoMedio) {
 		this.precoMedio = precoMedio;
+	}
+	public List<ProdutoDto> getProdutos() {
+		return produtos;
+	}
+	public void setProdutos(List<ProdutoDto> produtos) {
+		this.produtos = produtos;
+	}
+	public void addProduto(ProdutoDto produto) {
+		this.produtos.add(produto);
+		this.quantidadeTotal.add(produto.getQuantidade());
+		this.financeiro.add(produto.getPreco());
+		this.precoMedio = this.financeiro.divide(quantidadeTotal, MathContext.DECIMAL128);		
 	}
 
 	@Override

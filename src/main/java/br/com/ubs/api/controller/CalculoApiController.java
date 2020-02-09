@@ -18,14 +18,14 @@ import br.com.ubs.api.service.CalculoApiService;
 public class CalculoApiController {
 	
 	@Autowired
-	CalculoApiService calculoApiService;
+	private CalculoApiService calculoApiService;
 	
 	@GetMapping
 	public ResponseEntity<List<LojistaDto>>  calculaQuantidadeDeProdutosPorLojistaRequestParam(
 			@RequestParam(value="produto", required=true) String produto,
 			@RequestParam(value="lojistas", required=true) int lojistas) {
 				
-		List<LojistaDto> lojistasResultado = null; 
+		List<LojistaDto> lojistasResultado = this.calculoApiService.returnLojistasComProdutos(produto, lojistas); 
 		
 		return ResponseEntity.ok().body(lojistasResultado);
 	}
@@ -35,7 +35,7 @@ public class CalculoApiController {
 			@PathVariable String produto, 
 			@PathVariable int lojistas) {
 				
-		List<LojistaDto> lojistasResultado = null; 
+		List<LojistaDto> lojistasResultado = this.calculoApiService.returnLojistasComProdutos(produto, lojistas); 
 		
 		return ResponseEntity.ok().body(lojistasResultado);
 	}

@@ -48,8 +48,8 @@ public class Produto implements Serializable{
 		this.id = null;
 		this.product = product;
 		this.quantity = quantity;
-		this.volume = this.price.multiply(this.quantity);
 		this.price = price;
+		this.volume = this.price.multiply(this.quantity);
 		this.type = type;
 		this.industry = industry;
 		this.origin = origin;
@@ -103,6 +103,12 @@ public class Produto implements Serializable{
 	}
 	public void setFile_import(String file_import) {
 		this.file_import = file_import;
+	}
+	public BigDecimal getVolume() {
+		return volume;
+	}
+	public void setVolume(BigDecimal volume) {
+		this.volume = volume;
 	}
 
 	@Override
