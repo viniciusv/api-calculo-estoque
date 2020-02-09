@@ -2,6 +2,7 @@ package br.com.ubs.api.service.impl;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
 import java.util.IntSummaryStatistics;
@@ -28,6 +29,8 @@ public class CalculoApiServiceImpl implements CalculoApiService{
 	private BigDecimal somatorioDaQuantidade;
 	private BigDecimal somatorioDoVolume;
 	private BigDecimal mediaDePreço;
+	
+	private static final int ZERO = 0; 
 
 	@Override
 	public List<LojistaDto> returnLojistasComProdutos(String nomeProduto, int quantidadeDeLojistas) {
@@ -36,7 +39,7 @@ public class CalculoApiServiceImpl implements CalculoApiService{
 		this.carregaProdutos(nomeProduto);	
 		this.inicializaVariaveis();
 		this.inicializaLojistasDto(quantidadeDeLojistas);
-		this.inicializaCalculo(quantidadeDeLojistas);	
+		this.inicializaCalculo(BigDecimal.valueOf(quantidadeDeLojistas));	
 		
 		return this.lojistas;
 		
@@ -62,15 +65,40 @@ public class CalculoApiServiceImpl implements CalculoApiService{
 		
 	}
 
-	private void inicializaCalculo(int quantidadeDeLojistas) {
+	private void inicializaCalculo(BigDecimal quantidadeDeLojistas) {
 		
-		this.lojistas.forEach(lojista -> {
-			this.produtos.forEach(produto->{
-				BigDecimal novaQuantidade = produto.getQuantity().divide(BigDecimal.valueOf(quantidadeDeLojistas));
-				ProdutoDto produtoDto = new ProdutoDto(produto.getProduct(), novaQuantidade, produto.getPrice());
+		boolean isPulo = false;
+		
+		for (Produto produto : this.produtos) {
+			int controleDeSoma = 0;
+			
+			BigDecimal novaQuantidade = produto.getQuantity().divide(quantidadeDeLojistas, MathContext.DECIMAL128);
+			novaQuantidade = novaQuantidade.setScale(0, RoundingMode.DOWN);
+			
+			BigDecimal disponivel = novaQuantidade.multiply(quantidadeDeLojistas);
+			disponivel = produto.getQuantity().subtract(disponivel);
+			
+			int pulo = this.lojistas.size() - disponivel.intValue();
+		
+			for (LojistaDto lojista : this.lojistas) {
+				
+				BigDecimal quantidadeProdutoPorLojista = new BigDecimal(novaQuantidade.intValue());
+				
+				if(disponivel.intValue() != ZERO && controleDeSoma < disponivel.intValue()) {
+					if(!isPulo || pulo == ZERO) {
+						quantidadeProdutoPorLojista = novaQuantidade.add(BigDecimal.ONE);
+						controleDeSoma++;
+						isPulo = true;
+					}else {
+						pulo--;
+						isPulo = false;
+					}
+				}					
+				
+				ProdutoDto produtoDto = new ProdutoDto(produto.getProduct(), quantidadeProdutoPorLojista, produto.getPrice());
 				lojista.addProduto(produtoDto);
-			});
-		});
+			}	
+		}
 		
 	}
 

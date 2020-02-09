@@ -71,9 +71,9 @@ public class LojistaDto implements Serializable{
 	}
 	public void addProduto(ProdutoDto produto) {
 		this.produtos.add(produto);
-		this.quantidadeTotal.add(produto.getQuantidade());
-		this.financeiro.add(produto.getPreco());
-		this.precoMedio = this.financeiro.divide(quantidadeTotal, MathContext.DECIMAL128);		
+		this.quantidadeTotal = this.quantidadeTotal.add(produto.getQuantidade());
+		this.financeiro = this.financeiro.add(produto.getVolume());
+		this.precoMedio = this.financeiro.divide(this.quantidadeTotal, MathContext.DECIMAL128);		
 	}
 
 	@Override
