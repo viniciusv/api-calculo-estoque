@@ -8,6 +8,8 @@ import java.util.DoubleSummaryStatistics;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +32,11 @@ public class CalculoApiServiceImpl implements CalculoApiService{
 	
 	private BigDecimal somatorioDaQuantidade;
 	private BigDecimal somatorioDoVolume;
-	private BigDecimal mediaDePreço;
+	//private BigDecimal mediaDePreço;
 	
 	private static final int ZERO = 0; 
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(CalculoApiServiceImpl.class);
 
 	@Override
 	public List<LojistaDto> returnLojistasComProdutos(String nomeProduto, int quantidadeDeLojistas) {
@@ -112,7 +116,7 @@ public class CalculoApiServiceImpl implements CalculoApiService{
 		this.somatorioDaQuantidade = BigDecimal.valueOf(somatorioDaQuantidade.getSum());
 		this.somatorioDoVolume =  BigDecimal.valueOf(somatorioDoVolume.getSum());
 		
-		this.mediaDePreço = this.somatorioDoVolume.divide(this.somatorioDaQuantidade, MathContext.DECIMAL128);
+		//this.mediaDePreço = this.somatorioDoVolume.divide(this.somatorioDaQuantidade, MathContext.DECIMAL128);
 		
 	}
 
