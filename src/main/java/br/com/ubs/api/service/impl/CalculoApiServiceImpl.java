@@ -3,7 +3,6 @@ package br.com.ubs.api.service.impl;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
 import java.util.IntSummaryStatistics;
 import java.util.List;
@@ -17,15 +16,17 @@ import br.com.ubs.api.dto.LojistaDto;
 import br.com.ubs.api.dto.ProdutoDto;
 import br.com.ubs.api.model.Produto;
 import br.com.ubs.api.service.CalculoApiService;
+import br.com.ubs.api.service.LojistaService;
 import br.com.ubs.api.service.ProdutoService;
-import br.com.ubs.api.service.exceptions.ProdutoNotFoundException;
-import br.com.ubs.api.service.exceptions.ValidationNotFoundException;
 
 @Service
 public class CalculoApiServiceImpl implements CalculoApiService{
 	
 	@Autowired
 	private ProdutoService produtoService; 
+	
+	@Autowired
+	private LojistaService lojistaService; 
 	
 	private List<Produto> produtos;
 	private List<LojistaDto> lojistas;
@@ -41,71 +42,82 @@ public class CalculoApiServiceImpl implements CalculoApiService{
 	@Override
 	public List<LojistaDto> returnLojistasComProdutos(String nomeProduto, int quantidadeDeLojistas) {
 		
-		this.validaInformacoes(nomeProduto, quantidadeDeLojistas);
+		this.criaLojistas(quantidadeDeLojistas);
 		this.carregaProdutos(nomeProduto);	
+		
 		this.inicializaVariaveis();
-		this.inicializaLojistasDto(quantidadeDeLojistas);
-		this.distribuiProdutosPorLojistas(BigDecimal.valueOf(quantidadeDeLojistas));	
+		
+		this.iniciaCalculoDeDistribuicao(BigDecimal.valueOf(quantidadeDeLojistas));	
 		
 		return this.lojistas;
 		
 	}
 
-	private void validaInformacoes(String nomeProduto, int quantidadeDeLojistas) {
+	private void iniciaCalculoDeDistribuicao(BigDecimal quantidadeDeLojistas) {
 		
-		if(nomeProduto.equals(""))
-			throw new ValidationNotFoundException("Produto vazio!");
-		
-		if(quantidadeDeLojistas == 0)
-			throw new ValidationNotFoundException("Quantidade de lojista tem que ser maior que 0!");
-		
-	}
-
-	private void inicializaLojistasDto(int quantidadeDeLojistas) {
-		this.lojistas = new ArrayList<LojistaDto>();
-		
-		for(int cont=0; cont < quantidadeDeLojistas; cont++) {
-			LojistaDto lojistaDto = new LojistaDto("lojista-"+cont);
-			lojistas.add(lojistaDto);
-		}
-		
-	}
-
-	private void distribuiProdutosPorLojistas(BigDecimal quantidadeDeLojistas) {
-		
-		boolean isPulo = false;
+		Boolean isPulo = false;
 		
 		for (Produto produto : this.produtos) {
-			int controleDeSoma = 0;
 			
-			BigDecimal novaQuantidade = produto.getQuantity().divide(quantidadeDeLojistas, MathContext.DECIMAL128);
-			novaQuantidade = novaQuantidade.setScale(0, RoundingMode.DOWN);
+			BigDecimal novaQuantidadeDeProdutosPorLojistas = this.calculoQuantidadeDeProduto(produto.getQuantity(), quantidadeDeLojistas); 
+			BigDecimal quantidadeDeProdutosDisponiveisSobrando = this.calculoDeProdutosDisponiveis(novaQuantidadeDeProdutosPorLojistas, quantidadeDeLojistas, produto.getQuantity()) ;
 			
-			BigDecimal disponivel = novaQuantidade.multiply(quantidadeDeLojistas);
-			disponivel = produto.getQuantity().subtract(disponivel);
-			
-			int pulo = this.lojistas.size() - disponivel.intValue();
-		
-			for (LojistaDto lojista : this.lojistas) {
-				
-				BigDecimal quantidadeProdutoPorLojista = new BigDecimal(novaQuantidade.intValue());
-				
-				if(disponivel.intValue() != ZERO && controleDeSoma < disponivel.intValue()) {
-					if(!isPulo || pulo == ZERO) {
-						quantidadeProdutoPorLojista = novaQuantidade.add(BigDecimal.ONE);
-						controleDeSoma++;
-						isPulo = true;
-					}else {
-						pulo--;
-						isPulo = false;
-					}
-				}					
-				
-				ProdutoDto produtoDto = new ProdutoDto(produto.getProduct(), quantidadeProdutoPorLojista, produto.getPrice());
-				lojista.addProduto(produtoDto);
-			}	
+			this.distribuiProdutosPorLojistas(novaQuantidadeDeProdutosPorLojistas, quantidadeDeProdutosDisponiveisSobrando, isPulo, produto);
 		}
 		
+	}
+
+	private void distribuiProdutosPorLojistas(BigDecimal quantidadeDeProdutos, BigDecimal quantidadeDeProdutosDisponiveisSobrando, Boolean isPulo, Produto produto) {
+		
+		int controleDaQuantidadeDeProdutosDisponiveis = 0;
+		int quantidadeDeSaltos = this.calculoDeSalto(quantidadeDeProdutosDisponiveisSobrando);
+		
+		for (LojistaDto lojista : this.lojistas) {
+			
+			BigDecimal quantidadeProdutoPorLojistaAux = new BigDecimal(quantidadeDeProdutos.intValue());
+			
+			if(this.existeProdutosDisponiveis(quantidadeDeProdutosDisponiveisSobrando, controleDaQuantidadeDeProdutosDisponiveis)) {
+				
+				if(this.possoSaltarLojista(isPulo, quantidadeDeSaltos)) {
+					quantidadeProdutoPorLojistaAux = quantidadeDeProdutos.add(BigDecimal.ONE);
+					controleDaQuantidadeDeProdutosDisponiveis++;
+					isPulo = true;
+				}else {
+					quantidadeDeSaltos--;
+					isPulo = false;
+				}
+				
+			}					
+			
+			ProdutoDto produtoDto = new ProdutoDto(produto.getProduct(), quantidadeProdutoPorLojistaAux, produto.getPrice());
+			lojista.addProduto(produtoDto);
+		}	
+		
+	}
+
+	private boolean possoSaltarLojista(Boolean isPulo, int quantidadeDeSaltos) {
+		return !isPulo || quantidadeDeSaltos == ZERO;
+	}
+
+	private boolean existeProdutosDisponiveis(BigDecimal quantidadeDeProdutosDisponiveisSobrando, int controleDaQuantidadeDeProdutosDisponiveis) {
+		return quantidadeDeProdutosDisponiveisSobrando.intValue() != ZERO && controleDaQuantidadeDeProdutosDisponiveis < quantidadeDeProdutosDisponiveisSobrando.intValue();
+		
+	}
+
+	private int calculoDeSalto(BigDecimal disponivel) {
+		return this.lojistas.size() - disponivel.intValue();
+	}
+
+	private BigDecimal calculoQuantidadeDeProduto(BigDecimal quantidadeDeProdutos, BigDecimal quantidadeDeLojistas) {
+		BigDecimal novaQuantidade = quantidadeDeProdutos.divide(quantidadeDeLojistas, MathContext.DECIMAL128);
+		novaQuantidade = novaQuantidade.setScale(0, RoundingMode.DOWN);
+		return novaQuantidade;
+	}
+
+	private BigDecimal calculoDeProdutosDisponiveis(BigDecimal novaQuantidade, BigDecimal quantidadeDeLojistas, BigDecimal quantidadeDeProdutos) {
+		BigDecimal disponivel = novaQuantidade.multiply(quantidadeDeLojistas);
+		disponivel = quantidadeDeProdutos.subtract(disponivel);
+		return disponivel;
 	}
 
 	private void inicializaVariaveis() {
@@ -121,12 +133,11 @@ public class CalculoApiServiceImpl implements CalculoApiService{
 	}
 
 	private void carregaProdutos(String nomeProduto) {
-		
 		this.produtos = this.produtoService.findByProduto(nomeProduto);
-		
-		if(produtos == null ||produtos.size() == 0) 
-			throw new ProdutoNotFoundException("Produto não encontrado!");
-		
+	}
+	
+	private void criaLojistas(int quantidadeDeLojistas) {
+		this.lojistas = this.lojistaService.criaLojistas(quantidadeDeLojistas);		
 	}
 
 }

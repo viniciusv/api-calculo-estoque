@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import br.com.ubs.api.model.Produto;
 import br.com.ubs.api.repository.ProdutoRepository;
 import br.com.ubs.api.service.ProdutoService;
+import br.com.ubs.api.service.exceptions.ProdutoNotFoundException;
+import br.com.ubs.api.service.exceptions.ValidationNotFoundException;
 
 @Service
 public class ProdutoServiceImpl implements ProdutoService{
@@ -21,7 +23,28 @@ public class ProdutoServiceImpl implements ProdutoService{
 
 	@Override
 	public List<Produto> findByProduto(String nomeProduto) {
-		return this.produtoRepository.findByProduct(nomeProduto);
+		
+		this.validaNomeProduto(nomeProduto);	
+		
+		List<Produto> produtos = this.produtoRepository.findByProduct(nomeProduto); 
+		
+		this.produtoEncontrado(produtos);
+		
+		return produtos;
+	}
+
+	private void produtoEncontrado(List<Produto> produtos) {
+		
+		if(produtos == null ||produtos.size() == 0) 
+			throw new ProdutoNotFoundException("Produto não encontrado!");	
+		
+	}
+
+	private void validaNomeProduto(String nomeProduto) {
+		
+		if(nomeProduto.equals(""))
+			throw new ValidationNotFoundException("Nome do Produto vazio!");
+		
 	} 
 
 
