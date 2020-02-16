@@ -3,59 +3,41 @@ package br.com.ubs.api.service.impl;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.DoubleSummaryStatistics;
-import java.util.IntSummaryStatistics;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ubs.api.dto.LojistaDto;
 import br.com.ubs.api.dto.ProdutoDto;
 import br.com.ubs.api.model.Produto;
-import br.com.ubs.api.service.CalculoApiService;
-import br.com.ubs.api.service.LojistaService;
-import br.com.ubs.api.service.ProdutoService;
+import br.com.ubs.api.service.CalculoDistribuicaoService;
 
 @Service
-public class CalculoApiServiceImpl implements CalculoApiService{
-	
-	@Autowired
-	private ProdutoService produtoService; 
-	
-	@Autowired
-	private LojistaService lojistaService; 
-	
+public class CalculoDistribuicaoServiceImpl implements CalculoDistribuicaoService{
+
 	private List<Produto> produtos;
 	private List<LojistaDto> lojistas;
 	
-	private BigDecimal somatorioDaQuantidade;
-	private BigDecimal somatorioDoVolume;
-	//private BigDecimal mediaDePreço;
-	
 	private static final int ZERO = 0; 
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(CalculoApiServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CalculoDistribuicaoServiceImpl.class);
 
 	@Override
-	public List<LojistaDto> returnLojistasComProdutos(String nomeProduto, int quantidadeDeLojistas) {
-		
-		this.criaLojistas(quantidadeDeLojistas);
-		this.carregaProdutos(nomeProduto);	
-		
-		this.inicializaVariaveis();
-		
-		this.iniciaCalculoDeDistribuicao(BigDecimal.valueOf(quantidadeDeLojistas));	
+	public List<LojistaDto> returnLojistasComProdutos(List<Produto> produtos, List<LojistaDto> lojistas) {
+		this.produtos = produtos;
+		this.lojistas = lojistas;
+
+		this.iniciaCalculoDeDistribuicao();	
 		
 		return this.lojistas;
-		
 	}
 
-	private void iniciaCalculoDeDistribuicao(BigDecimal quantidadeDeLojistas) {
+	private void iniciaCalculoDeDistribuicao() {
 		
 		Boolean isPulo = new Boolean(false);
+		BigDecimal quantidadeDeLojistas = BigDecimal.valueOf(this.lojistas.size());
 		
 		for (Produto produto : this.produtos) {
 			
@@ -121,25 +103,4 @@ public class CalculoApiServiceImpl implements CalculoApiService{
 		disponivel = quantidadeDeProdutos.subtract(disponivel);
 		return disponivel;
 	}
-
-	private void inicializaVariaveis() {
-		
-		IntSummaryStatistics somatorioDaQuantidade = this.produtos.stream().mapToInt(p -> p.getQuantity().intValue()).summaryStatistics();
-		DoubleSummaryStatistics somatorioDoVolume = this.produtos.stream().mapToDouble(p -> p.getVolume().doubleValue()).summaryStatistics();
-		
-		this.somatorioDaQuantidade = BigDecimal.valueOf(somatorioDaQuantidade.getSum());
-		this.somatorioDoVolume =  BigDecimal.valueOf(somatorioDoVolume.getSum());
-		
-		//this.mediaDePreço = this.somatorioDoVolume.divide(this.somatorioDaQuantidade, MathContext.DECIMAL128);
-		
-	}
-
-	private void carregaProdutos(String nomeProduto) {
-		this.produtos = this.produtoService.findByProduto(nomeProduto);
-	}
-	
-	private void criaLojistas(int quantidadeDeLojistas) {
-		this.lojistas = this.lojistaService.criaLojistas(quantidadeDeLojistas);		
-	}
-
 }

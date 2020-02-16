@@ -1,7 +1,5 @@
 package br.com.ubs.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,34 +8,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.ubs.api.dto.LojistaDto;
-import br.com.ubs.api.service.CalculoApiService;
+import br.com.ubs.api.dto.EstoqueDto;
+import br.com.ubs.api.service.EstoqueService;
 
 @RestController
 @RequestMapping(value="/estoque/calculo")
-public class CalculoApiController {
+public class CalculoDistruicaoController {
 	
 	@Autowired
-	private CalculoApiService calculoApiService;
+	private EstoqueService estoqueService; 
 	
 	@GetMapping
-	public ResponseEntity<List<LojistaDto>>  calculaQuantidadeDeProdutosPorLojistaRequestParam(
+	public ResponseEntity<EstoqueDto>  calculaQuantidadeDeProdutosPorLojistaRequestParam(
 			@RequestParam(value="produto", required=true) String produto,
 			@RequestParam(value="lojistas", required=true) int lojistas) {
 				
-		List<LojistaDto> lojistasResultado = this.calculoApiService.returnLojistasComProdutos(produto, lojistas); 
+		EstoqueDto estoqueDto = this.estoqueService.returnEstoqueAtualizado(produto, lojistas); 
 		
-		return ResponseEntity.ok().body(lojistasResultado);
+		return ResponseEntity.ok().body(estoqueDto);
 	}
 	
 	@GetMapping(value = "{produto}/{lojistas}")
-	public ResponseEntity<List<LojistaDto>> calculaQuantidadeDeProdutosPorLojistaPathVariable(
+	public ResponseEntity<EstoqueDto> calculaQuantidadeDeProdutosPorLojistaPathVariable(
 			@PathVariable String produto, 
 			@PathVariable int lojistas) {
 				
-		List<LojistaDto> lojistasResultado = this.calculoApiService.returnLojistasComProdutos(produto, lojistas); 
+		EstoqueDto estoqueDto = this.estoqueService.returnEstoqueAtualizado(produto, lojistas); 
 		
-		return ResponseEntity.ok().body(lojistasResultado);
+		return ResponseEntity.ok().body(estoqueDto);
 	}
 
 }
