@@ -55,19 +55,19 @@ public class CalculoApiServiceImpl implements CalculoApiService{
 
 	private void iniciaCalculoDeDistribuicao(BigDecimal quantidadeDeLojistas) {
 		
-		Boolean isPulo = false;
+		Boolean isPulo = new Boolean(false);
 		
 		for (Produto produto : this.produtos) {
 			
 			BigDecimal novaQuantidadeDeProdutosPorLojistas = this.calculoQuantidadeDeProduto(produto.getQuantity(), quantidadeDeLojistas); 
 			BigDecimal quantidadeDeProdutosDisponiveisSobrando = this.calculoDeProdutosDisponiveis(novaQuantidadeDeProdutosPorLojistas, quantidadeDeLojistas, produto.getQuantity()) ;
 			
-			this.distribuiProdutosPorLojistas(novaQuantidadeDeProdutosPorLojistas, quantidadeDeProdutosDisponiveisSobrando, isPulo, produto);
+			isPulo = this.distribuiProdutosPorLojistas(novaQuantidadeDeProdutosPorLojistas, quantidadeDeProdutosDisponiveisSobrando, isPulo, produto);
 		}
 		
 	}
 
-	private void distribuiProdutosPorLojistas(BigDecimal quantidadeDeProdutos, BigDecimal quantidadeDeProdutosDisponiveisSobrando, Boolean isPulo, Produto produto) {
+	private Boolean distribuiProdutosPorLojistas(BigDecimal quantidadeDeProdutos, BigDecimal quantidadeDeProdutosDisponiveisSobrando, Boolean isPulo, Produto produto) {
 		
 		int controleDaQuantidadeDeProdutosDisponiveis = 0;
 		int quantidadeDeSaltos = this.calculoDeSalto(quantidadeDeProdutosDisponiveisSobrando);
@@ -81,10 +81,10 @@ public class CalculoApiServiceImpl implements CalculoApiService{
 				if(this.possoSaltarLojista(isPulo, quantidadeDeSaltos)) {
 					quantidadeProdutoPorLojistaAux = quantidadeDeProdutos.add(BigDecimal.ONE);
 					controleDaQuantidadeDeProdutosDisponiveis++;
-					isPulo = true;
+					isPulo = Boolean.TRUE;
 				}else {
 					quantidadeDeSaltos--;
-					isPulo = false;
+					isPulo = Boolean.FALSE;
 				}
 				
 			}					
@@ -92,6 +92,8 @@ public class CalculoApiServiceImpl implements CalculoApiService{
 			ProdutoDto produtoDto = new ProdutoDto(produto.getProduct(), quantidadeProdutoPorLojistaAux, produto.getPrice());
 			lojista.addProduto(produtoDto);
 		}	
+		
+		return isPulo;
 		
 	}
 
