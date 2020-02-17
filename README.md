@@ -112,70 +112,75 @@ GET /estoque/calculo/{produto}/{lojistas} - /estoque/calculo/EMMS/3
 
 Exemplo Json:
 ```
-[
-    {
-        "lojista": "lojista-0",
-        "quantidadeTotal": 135,
-        "financeiro": 749.27,
-        "precoMedio": 5.550148148148148148148148148148148,
-        "produtos": [
-            {
-                "produto": "EMMS",
-                "quantidade": 37,
-                "preco": 3.75,
-                "volume": 138.75
-            },
-            {
-                "produto": "EMMS",
-                "quantidade": 18,
-                "preco": 5.39,
-                "volume": 97.02
-            },
-            {
-                "produto": "EMMS",
-                "quantidade": 50,
-                "preco": 5.8,
-                "volume": 290
-            },
-            {
-                "produto": "EMMS",
-                "quantidade": 30,
-                "preco": 7.45,
-                "volume": 223.5
-            }
-        ]
-    },
-    {
-        "lojista": "lojista-1",
-        "quantidadeTotal": 135,
-        "financeiro": 750.92,
-        "precoMedio": 5.56237037037037037037037037037037,
-        "produtos": [
-            {
-                "produto": "EMMS",
-                "quantidade": 37,
-                "preco": 3.75,
-                "volume": 138.75
-            },
-            {
-                "produto": "EMMS",
-                "quantidade": 18,
-                "preco": 5.39,
-                "volume": 97.02
-            },
-            {
-                "produto": "EMMS",
-                "quantidade": 49,
-                "preco": 5.8,
-                "volume": 284.2
-            },
-            {
-                "produto": "EMMS",
-                "quantidade": 31,
-                "preco": 7.45,
-                "volume": 230.95
-            }
-        ]
-    }
-]
+{
+    "somatorioDaQuantidade": 270,
+    "somatorioDoVolume": 1500.19,
+    "mediaDePreco": 5.556259259259259259259259259259259,
+    "lojistas": [
+        {
+            "lojista": "lojista-0",
+            "quantidadeTotal": 135,
+            "financeiro": 749.27,
+            "precoMedio": 5.550148148148148148148148148148148,
+            "produtos": [
+                {
+                    "produto": "EMMS",
+                    "quantidade": 37,
+                    "preco": 3.75,
+                    "volume": 138.75
+                },
+                {
+                    "produto": "EMMS",
+                    "quantidade": 18,
+                    "preco": 5.39,
+                    "volume": 97.02
+                },
+                {
+                    "produto": "EMMS",
+                    "quantidade": 50,
+                    "preco": 5.8,
+                    "volume": 290
+                },
+                {
+                    "produto": "EMMS",
+                    "quantidade": 30,
+                    "preco": 7.45,
+                    "volume": 223.5
+                }
+            ]
+        },
+        {
+            "lojista": "lojista-1",
+            "quantidadeTotal": 135,
+            "financeiro": 750.92,
+            "precoMedio": 5.56237037037037037037037037037037,
+            "produtos": [
+                {
+                    "produto": "EMMS",
+                    "quantidade": 37,
+                    "preco": 3.75,
+                    "volume": 138.75
+                },
+                {
+                    "produto": "EMMS",
+                    "quantidade": 18,
+                    "preco": 5.39,
+                    "volume": 97.02
+                },
+                {
+                    "produto": "EMMS",
+                    "quantidade": 49,
+                    "preco": 5.8,
+                    "volume": 284.2
+                },
+                {
+                    "produto": "EMMS",
+                    "quantidade": 31,
+                    "preco": 7.45,
+                    "volume": 230.95
+                }
+            ]
+        }
+    ]
+}
 ```
