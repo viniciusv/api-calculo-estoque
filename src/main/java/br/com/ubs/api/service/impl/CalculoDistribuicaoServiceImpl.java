@@ -67,7 +67,7 @@ public class CalculoDistribuicaoServiceImpl implements CalculoDistribuicaoServic
 				}else {
 					quantidadeDeSaltos--;
 					isPulo = Boolean.FALSE;
-				}
+				}  
 				
 			}					
 			

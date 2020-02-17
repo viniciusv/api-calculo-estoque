@@ -1,6 +1,7 @@
 package br.com.ubs.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,12 +14,13 @@ import br.com.ubs.api.service.EstoqueService;
 
 @RestController
 @RequestMapping(value="/estoque/calculo")
-public class CalculoDistruicaoController {
+public class CalculoDistribuicaoController {
 	
 	@Autowired
 	private EstoqueService estoqueService; 
 	
 	@GetMapping
+	@Cacheable("estoque")
 	public ResponseEntity<EstoqueDto>  calculaQuantidadeDeProdutosPorLojistaRequestParam(
 			@RequestParam(value="produto", required=true) String produto,
 			@RequestParam(value="lojistas", required=true) int lojistas) {
@@ -29,6 +31,7 @@ public class CalculoDistruicaoController {
 	}
 	
 	@GetMapping(value = "{produto}/{lojistas}")
+	@Cacheable("estoque")
 	public ResponseEntity<EstoqueDto> calculaQuantidadeDeProdutosPorLojistaPathVariable(
 			@PathVariable String produto, 
 			@PathVariable int lojistas) {
