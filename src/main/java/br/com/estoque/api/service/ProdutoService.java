@@ -10,4 +10,8 @@ import br.com.estoque.api.model.Produto;
 public interface ProdutoService {
 	
 	List<Produto> findByProduto(String nomeProduto);
+	
+	List<Produto> findAll();
+
+	void save(Produto produto);
 }

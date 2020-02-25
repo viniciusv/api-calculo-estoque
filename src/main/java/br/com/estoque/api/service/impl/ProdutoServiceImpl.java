@@ -45,6 +45,17 @@ public class ProdutoServiceImpl implements ProdutoService{
 		if(nomeProduto.equals(""))
 			throw new ValidationNotFoundException("Nome do Produto vazio!");
 		
+	}
+
+	@Override
+	public List<Produto> findAll() {
+		return this.produtoRepository.findAll();
+	}
+
+	@Override
+	public void save(Produto produto) {
+		this.produtoRepository.save(produto);
+		
 	} 
 
 
