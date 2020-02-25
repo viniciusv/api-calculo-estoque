@@ -62,6 +62,10 @@ Criar um endpoint que faz o cálculo acima, recebendo como parâmetros:
 # Componentes 
 
 * [Spring Boot](https://spring.io/projects/spring-boot) - Para criar uma api REST.
+* [Spring - Cache Data](https://spring.io/guides/gs/caching/) - Caching da aplicação.
+* [Spring Data - JPA](https://spring.io/projects/spring-data-jpa) - Este módulo lida com suporte aprimorado para camadas de acesso a dados baseadas em JPA. Isso facilita a criação de aplicativos com tecnologia Spring que usam tecnologias de acesso a dados..
+* [MySql](https://github.com/mysql) - Banco de Dados.
+* [Lombok](https://projectlombok.org/) - é uma biblioteca Java focada em produtividade e redução de código boilerplate que por meio de anotações adicionadas ao nosso código ensinamos o compilador (maven ou gradle) durante o processo de compilação a criar código Java.
 
 # Let's go
 ### Clone o projeto:
