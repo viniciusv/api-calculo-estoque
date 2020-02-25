@@ -27,5 +27,9 @@ public class LojistaDto implements Serializable{
 	private BigDecimal precoMedio;
 	private List<ProdutoDto> produtos;
 	
+	public void addProduto(ProdutoDto produtoDto) {
+		this.produtos.add(produtoDto);
+	}
+	
 	
 }

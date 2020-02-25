@@ -24,7 +24,7 @@ public class LojistaServiceImpl implements LojistaService{
 		List<LojistaDto> lojistas = new ArrayList<LojistaDto>();
 		
 		for(int cont=0; cont < quantidade; cont++) {
-			LojistaDto lojistaDto = new LojistaDto("lojista-"+cont);
+			LojistaDto lojistaDto = LojistaDto.builder().lojista("Lojista-"+cont).build();
 			lojistas.add(lojistaDto);
 		}
 		

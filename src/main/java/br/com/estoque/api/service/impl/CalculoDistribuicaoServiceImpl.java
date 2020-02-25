@@ -71,7 +71,7 @@ public class CalculoDistribuicaoServiceImpl implements CalculoDistribuicaoServic
 				
 			}					
 			
-			ProdutoDto produtoDto = new ProdutoDto(produto.getProduct(), quantidadeProdutoPorLojistaAux, produto.getPrice());
+			ProdutoDto produtoDto = ProdutoDto.builder().produto(produto.getProduct()).quantidade(quantidadeProdutoPorLojistaAux).preco(produto.getPrice()).build(); 
 			lojista.addProduto(produtoDto);
 		}	
 		
