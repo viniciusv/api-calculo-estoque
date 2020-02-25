@@ -5,24 +5,22 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import br.com.estoque.api.dto.LojistaDto;
 import br.com.estoque.api.dto.ProdutoDto;
 import br.com.estoque.api.model.Produto;
 import br.com.estoque.api.service.CalculoDistribuicaoService;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class CalculoDistribuicaoServiceImpl implements CalculoDistribuicaoService{
 
 	private List<Produto> produtos;
 	private List<LojistaDto> lojistas;
 	
 	private static final int ZERO = 0; 
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(CalculoDistribuicaoServiceImpl.class);
 
 	@Override
 	public List<LojistaDto> returnLojistasComProdutos(List<Produto> produtos, List<LojistaDto> lojistas) {
@@ -35,6 +33,10 @@ public class CalculoDistribuicaoServiceImpl implements CalculoDistribuicaoServic
 	}
 
 	private void iniciaCalculoDeDistribuicao() {
+		
+		log.info("Iniciando calculo de distribuição.");
+		log.debug("Quantidade de lojistas - " + this.lojistas.size());
+		log.debug("Quantidade de produtos - " + this.produtos.size());
 		
 		Boolean isPulo = new Boolean(false);
 		BigDecimal quantidadeDeLojistas = BigDecimal.valueOf(this.lojistas.size());

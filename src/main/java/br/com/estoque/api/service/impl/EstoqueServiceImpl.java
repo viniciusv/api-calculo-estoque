@@ -16,8 +16,10 @@ import br.com.estoque.api.service.CalculoDistribuicaoService;
 import br.com.estoque.api.service.EstoqueService;
 import br.com.estoque.api.service.LojistaService;
 import br.com.estoque.api.service.ProdutoService;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class EstoqueServiceImpl implements EstoqueService {
 	
 	@Autowired
@@ -57,6 +59,8 @@ public class EstoqueServiceImpl implements EstoqueService {
 		BigDecimal somatorioDaQuantidade = BigDecimal.valueOf(somatorioDaQuantidadeStatistics.getSum());
 		BigDecimal somatorioDoVolume =  BigDecimal.valueOf(somatorioDoVolumeStatistics.getSum());
 		BigDecimal mediaDePreco = somatorioDoVolume.divide(somatorioDaQuantidade, MathContext.DECIMAL128);
+		
+		log.info("Criado Estoque com sucesso!");
 		
 		return new EstoqueDto(somatorioDaQuantidade, somatorioDoVolume, mediaDePreco, lojistas);
 	}

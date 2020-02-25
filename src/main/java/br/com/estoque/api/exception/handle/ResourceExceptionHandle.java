@@ -2,8 +2,6 @@ package br.com.estoque.api.exception.handle;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,16 +10,17 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import br.com.estoque.api.service.exceptions.ProdutoNotFoundException;
 import br.com.estoque.api.service.exceptions.ValidationNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
+@Slf4j
 public class ResourceExceptionHandle {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceExceptionHandle.class);
 	
 	@ExceptionHandler(ValidationNotFoundException.class)
 	public ResponseEntity<StandardError> validationNotFoundException(ValidationNotFoundException e, HttpServletRequest request){
 		StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
 		
+		log.error(e.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);		
 	}
 	
@@ -29,6 +28,7 @@ public class ResourceExceptionHandle {
 	public ResponseEntity<StandardError> produtoNotFoundException(ProdutoNotFoundException e, HttpServletRequest request){
 		StandardError err = new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage(), System.currentTimeMillis());
 		
+		log.error(e.getMessage());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);		
 	}
 	
@@ -36,6 +36,7 @@ public class ResourceExceptionHandle {
 	public ResponseEntity<StandardError> methodArgumentTypeMismatchException(NumberFormatException e, HttpServletRequest request){
 		StandardError err = new StandardError(HttpStatus.NOT_ACCEPTABLE.value(), e.getMessage(), System.currentTimeMillis());
 		
+		log.error(e.getMessage());
 		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(err);		
 	}
 

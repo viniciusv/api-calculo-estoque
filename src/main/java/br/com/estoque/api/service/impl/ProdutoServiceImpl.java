@@ -2,8 +2,6 @@ package br.com.estoque.api.service.impl;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +10,11 @@ import br.com.estoque.api.repository.ProdutoRepository;
 import br.com.estoque.api.service.ProdutoService;
 import br.com.estoque.api.service.exceptions.ProdutoNotFoundException;
 import br.com.estoque.api.service.exceptions.ValidationNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class ProdutoServiceImpl implements ProdutoService{
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProdutoServiceImpl.class);
 	
 	@Autowired
 	private ProdutoRepository produtoRepository;
@@ -35,27 +33,34 @@ public class ProdutoServiceImpl implements ProdutoService{
 
 	private void produtoEncontrado(List<Produto> produtos) {
 		
-		if(produtos == null ||produtos.size() == 0) 
-			throw new ProdutoNotFoundException("Produto não encontrado!");	
+		if(produtos == null ||produtos.size() == 0) {
+			log.error("Produto não encontrado!");
+			throw new ProdutoNotFoundException("Produto não encontrado!");
+		}
+				
 		
 	}
 
 	private void validaNomeProduto(String nomeProduto) {
 		
-		if(nomeProduto.equals(""))
+		if(nomeProduto.equals("")) {
+			log.error("Nome do Produto vazio!");
 			throw new ValidationNotFoundException("Nome do Produto vazio!");
+		}
+			
 		
 	}
 
 	@Override
 	public List<Produto> findAll() {
+		log.info("Get Produtos!");
 		return this.produtoRepository.findAll();
 	}
 
 	@Override
 	public void save(Produto produto) {
 		this.produtoRepository.save(produto);
-		
+		log.info("Produto Criado!");
 	} 
 
 
