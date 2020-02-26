@@ -29,15 +29,27 @@ public class DatabaseConfig {
 		List<Produto> estoques = this.produtoService.findAll();
 		
 		if(estoques.size() == 0) {
-			Produto produto = Produto.builder().product("EMMS").quantity(new BigDecimal(74)).price(new BigDecimal(3.75)).volume(BigDecimal.ZERO).type("XL").industry("Broadcasting").origin("TX").file_import("data_1.json").build();
-			Produto produto1 = Produto.builder().product("EMMS").quantity(new BigDecimal(36)).price(new BigDecimal(5.39)).volume(BigDecimal.ZERO).type("3XL").industry("Broadcasting").origin("MN").file_import("data_1.json").build();
-			Produto produto2 = Produto.builder().product("EMMS").quantity(new BigDecimal(99)).price(new BigDecimal(5.80)).volume(BigDecimal.ZERO).type("2XL").industry("Broadcasting").origin("MI").file_import("data_1.json").build();
-			Produto produto3 = Produto.builder().product("EMMS").quantity(new BigDecimal(61)).price(new BigDecimal(7.45)).volume(BigDecimal.ZERO).type("2XL").industry("Broadcasting").origin("LA").file_import("data_1.json").build();
-				
-			this.produtoService.save(produto);
-			this.produtoService.save(produto1);
-			this.produtoService.save(produto2);
-			this.produtoService.save(produto3);	
+			this.createProduto("EMMS", new BigDecimal(74), new BigDecimal(7.75), "XL", "Broadcasting", "TX", "data_1.json");
+			this.createProduto("EMMS", new BigDecimal(36), new BigDecimal(5.39), "3XL", "Broadcasting", "MN", "data_1.json");
+			this.createProduto("EMMS", new BigDecimal(99), new BigDecimal(5.80), "2XL", "Broadcasting", "MI", "data_1.json");
+			this.createProduto("EMMS", new BigDecimal(61), new BigDecimal(7.45), "2XL", "Broadcasting", "LA", "data_1.json");
 		}		
+	}
+
+	private void createProduto(String product, BigDecimal quantity, BigDecimal price, String type,
+			String industry, String origin, String file_import) {
+		
+		Produto produto = Produto.builder()
+				.product(product)
+				.quantity(quantity)
+				.price(price)
+				.volume(quantity.multiply(price))
+				.type(type)
+				.industry(industry)
+				.origin(origin)
+				.file_import(file_import)
+				.build();
+		
+		this.produtoService.save(produto);
 	}
 }

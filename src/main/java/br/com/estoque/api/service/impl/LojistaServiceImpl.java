@@ -1,5 +1,6 @@
 package br.com.estoque.api.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class LojistaServiceImpl implements LojistaService{
 		List<LojistaDto> lojistas = new ArrayList<LojistaDto>();
 		
 		for(int cont=0; cont < quantidade; cont++) {
-			LojistaDto lojistaDto = LojistaDto.builder().lojista("Lojista-"+cont).build();
+			LojistaDto lojistaDto = new LojistaDto("Lojista-"+cont, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
 			lojistas.add(lojistaDto);
 			log.debug("Criado Lojista-"+cont);
 		}

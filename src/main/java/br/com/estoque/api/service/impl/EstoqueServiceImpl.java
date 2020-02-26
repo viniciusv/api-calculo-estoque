@@ -60,9 +60,15 @@ public class EstoqueServiceImpl implements EstoqueService {
 		BigDecimal somatorioDoVolume =  BigDecimal.valueOf(somatorioDoVolumeStatistics.getSum());
 		BigDecimal mediaDePreco = somatorioDoVolume.divide(somatorioDaQuantidade, MathContext.DECIMAL128);
 		
-		log.info("Criado Estoque com sucesso!");
+		log.info("Estoque criado com sucesso!");
 		
-		return new EstoqueDto(somatorioDaQuantidade, somatorioDoVolume, mediaDePreco, lojistas);
+		return EstoqueDto.builder()
+				.somatorioDaQuantidade(somatorioDaQuantidade)
+				.somatorioDoVolume(somatorioDoVolume)
+				.mediaDePreco(mediaDePreco)
+				.lojistas(lojistas)
+				.build();
+				
 	}
 
 
