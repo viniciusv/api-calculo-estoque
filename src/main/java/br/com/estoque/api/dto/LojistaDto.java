@@ -30,10 +30,13 @@ public class LojistaDto implements Serializable{
 			this.produtos = new ArrayList<ProdutoDto>();
 		}
 		this.produtos.add(produtoDto);
-		
+		this.incrementaTotal(produtoDto);
+	}
+
+	private void incrementaTotal(ProdutoDto produtoDto) {
 		this.quantidadeTotal = this.quantidadeTotal.add(produtoDto.getQuantidade());
 		this.financeiro = this.financeiro.add(produtoDto.getVolume());
-		this.precoMedio = this.financeiro.divide(this.quantidadeTotal, MathContext.DECIMAL128);		
+		this.precoMedio = this.financeiro.divide(this.quantidadeTotal, MathContext.DECIMAL128);	
 	}
 	
 	
