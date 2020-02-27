@@ -64,6 +64,7 @@ Criar um endpoint que faz o cálculo acima, recebendo como parâmetros:
 
 <details>
 <summary> Componentes </summary>
+<p>
     
 * [Spring Boot](https://spring.io/projects/spring-boot) - Para criar uma api REST.
 * [Spring - Cache Data](https://spring.io/guides/gs/caching/) - Caching da aplicação.
@@ -71,10 +72,14 @@ Criar um endpoint que faz o cálculo acima, recebendo como parâmetros:
 * [Spring - HATEOAS](https://spring.io/projects/spring-hateoas#overview) - O Spring HATEOAS fornece algumas APIs para facilitar a criação de representações REST que seguem o princípio do HATEOAS ao trabalhar com o Spring e especialmente o Spring MVC.
 * [MySql](https://github.com/mysql) - Banco de Dados.
 * [Lombok](https://projectlombok.org/) - é uma biblioteca Java focada em produtividade e redução de código boilerplate que por meio de anotações adicionadas ao nosso código ensinamos o compilador (maven ou gradle) durante o processo de compilação a criar código Java.
+
 </p>
 </details>
 
-# Let's go
+<details>
+<summary> Let's go </summary>
+<p>
+    
 ### Clone o projeto:
 
 ```
@@ -200,3 +205,6 @@ Exemplo Json:
     }
 }
 ```
+
+</p>
+</details>
