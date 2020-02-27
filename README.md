@@ -2,7 +2,9 @@
 
 Criar uma api que faça o calculo de distrubuição de um produto pela quantidade de lojistas e retorne um Json estruturado.
 
-# Business Rules 
+<details>
+<summary>Business Rules</summary>
+<p>
 Podemos ver que temos em estoque 270 quantidades do produto EMMS. Podemos ver também que este total de 270 unidades de EMMS
 foram adquiridas em 4 transações diferentes, cada transação tem sua quantidade e seu preço.
 
@@ -57,15 +59,20 @@ os totais do arquivo data_1.json.  :sunglasses:
 Criar um endpoint que faz o cálculo acima, recebendo como parâmetros:
 * O **produto** que será distribuído.
 * A **quantidade de lojas** que iremos vender nosso estoque.
+</p>
+</details>
 
-
-# Componentes 
-
+<details>
+<summary> Componentes </summary>
+    
 * [Spring Boot](https://spring.io/projects/spring-boot) - Para criar uma api REST.
 * [Spring - Cache Data](https://spring.io/guides/gs/caching/) - Caching da aplicação.
 * [Spring Data - JPA](https://spring.io/projects/spring-data-jpa) - Este módulo lida com suporte aprimorado para camadas de acesso a dados baseadas em JPA. Isso facilita a criação de aplicativos com tecnologia Spring que usam tecnologias de acesso a dados..
+* [Spring - HATEOAS](https://spring.io/projects/spring-hateoas#overview) - O Spring HATEOAS fornece algumas APIs para facilitar a criação de representações REST que seguem o princípio do HATEOAS ao trabalhar com o Spring e especialmente o Spring MVC.
 * [MySql](https://github.com/mysql) - Banco de Dados.
 * [Lombok](https://projectlombok.org/) - é uma biblioteca Java focada em produtividade e redução de código boilerplate que por meio de anotações adicionadas ao nosso código ensinamos o compilador (maven ou gradle) durante o processo de compilação a criar código Java.
+</p>
+</details>
 
 # Let's go
 ### Clone o projeto:
@@ -122,7 +129,7 @@ Exemplo Json:
     "mediaDePreco": 5.556259259259259259259259259259259,
     "lojistas": [
         {
-            "lojista": "lojista-0",
+            "lojista": "Lojista-0",
             "quantidadeTotal": 135,
             "financeiro": 749.27,
             "precoMedio": 5.550148148148148148148148148148148,
@@ -154,7 +161,7 @@ Exemplo Json:
             ]
         },
         {
-            "lojista": "lojista-1",
+            "lojista": "Lojista-1",
             "quantidadeTotal": 135,
             "financeiro": 750.92,
             "precoMedio": 5.56237037037037037037037037037037,
@@ -185,6 +192,11 @@ Exemplo Json:
                 }
             ]
         }
-    ]
+    ],
+    "_links": {
+        "self": {
+            "href": "http://localhost:8080/estoque/calculo?produto=EMMS&lojistas=2"
+        }
+    }
 }
 ```
